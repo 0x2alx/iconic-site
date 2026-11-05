@@ -1,0 +1,9 @@
+.DS_Store
+*.log
+.env
+.env.*
+# agent / ops files never belong in this repo
+CLAUDE.md
+.claude/
+memory/
+HANDOFF.md

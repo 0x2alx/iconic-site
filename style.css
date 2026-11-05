@@ -1,0 +1,55 @@
+/* Iconic site. Dark on purpose, with the logo's candy colours as accents. System fonts only, so the pages load nothing from third parties. */
+:root {
+  --void: #120B2E;
+  --deep: #1D1442;
+  --line: #31266A;
+  --accent: #FFB84D;
+  --link: #8FD8FF;
+  --ink: #F3EEFF;
+  --muted: #ABA2D4;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--void); color: var(--ink);
+  font: 17px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+.wrap {
+  max-width: 44rem; margin: 0 auto; padding-block: 2.5rem 4rem;
+  padding-left: max(1rem, env(safe-area-inset-left, 0px)); padding-right: max(1rem, env(safe-area-inset-right, 0px));
+}
+header.top { display: flex; align-items: center; gap: .9rem; margin-bottom: 2.5rem; flex-wrap: wrap; }
+header.top img { width: 52px; height: 52px; }
+header.top a { color: var(--ink); text-decoration: none; font-weight: 700; font-size: 1.35rem; }
+nav { margin-left: auto; display: flex; gap: 1.1rem; font-size: .95rem; }
+nav a { color: var(--link); text-decoration: none; }
+nav a[aria-current] { color: var(--accent); }
+h1 { font-size: 2rem; line-height: 1.2; margin: 0 0 .4rem; text-wrap: balance; }
+h2 { font-size: 1.2rem; margin: 2.4rem 0 .5rem; color: var(--accent); text-wrap: balance; }
+p, li { color: var(--ink); }
+.muted { color: var(--muted); }
+a { color: var(--link); }
+a:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+ul { padding-left: 1.2rem; }
+li + li { margin-top: .35rem; }
+.free { display: inline-block; font-size: .78rem; font-weight: 700; letter-spacing: .02em; padding: .1em .5em; border-radius: 6px;
+  background: var(--accent); color: var(--void); vertical-align: .15em; }
+
+/* FAQ */
+details { border-top: 1px solid var(--line); padding: .9rem 0; }
+details:last-of-type { border-bottom: 1px solid var(--line); }
+summary { cursor: pointer; font-weight: 600; list-style: none; display: flex; gap: .7rem; }
+summary::-webkit-details-marker { display: none; }
+summary::before { content: "+"; color: var(--accent); font-weight: 700; width: 1ch; flex: none; }
+details[open] summary::before { content: "−"; }
+details > :not(summary) { margin-left: 1.7rem; }
+
+/* home */
+.hero { text-align: center; padding-block: 1rem 1.5rem; }
+.hero img { width: 140px; height: 140px; }
+.hero p { color: var(--muted); max-width: 32rem; margin-inline: auto; }
+.links { display: grid; gap: .8rem; margin-top: 2rem; }
+.links a { display: block; padding: 1rem 1.2rem; background: var(--deep); border: 1px solid var(--line); border-radius: 12px;
+  color: var(--ink); text-decoration: none; }
+.links a span { display: block; color: var(--muted); font-size: .92rem; }
+footer { margin-top: 3.5rem; color: var(--muted); font-size: .88rem; }
