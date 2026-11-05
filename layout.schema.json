@@ -1,0 +1,136 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://0x2alx.github.io/iconic-site/layout.schema.json",
+  "title": "Iconic layout",
+  "description": "A widget layout for the Iconic Android app, or a {\"configs\": [...]} list of them. Documented at https://0x2alx.github.io/iconic-site/ai.html",
+  "oneOf": [
+    { "$ref": "#/$defs/layout" },
+    {
+      "type": "object",
+      "required": ["configs"],
+      "properties": {
+        "configs": { "type": "array", "items": { "$ref": "#/$defs/layout" } }
+      }
+    },
+    { "type": "array", "items": { "$ref": "#/$defs/layout" } }
+  ],
+  "$defs": {
+    "color": {
+      "description": "\"#RRGGBB\" or \"#AARRGGBB\" (alpha first).",
+      "type": "string",
+      "pattern": "^#([0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$"
+    },
+    "layout": {
+      "type": "object",
+      "required": ["items"],
+      "properties": {
+        "widgetId": { "type": "integer", "default": 0, "description": "Id of an existing widget to change in place. Omit or 0 for a new saved layout." },
+        "name": { "type": "string", "default": "" },
+        "items": { "type": "array", "items": { "$ref": "#/$defs/item" }, "description": "In display order." },
+        "layout": {
+          "default": { "type": "auto" },
+          "oneOf": [
+            { "type": "object", "required": ["type"], "properties": { "type": { "const": "auto" } } },
+            {
+              "type": "object",
+              "required": ["type", "rows", "cols"],
+              "properties": {
+                "type": { "const": "fixed" },
+                "rows": { "type": "integer", "minimum": 1 },
+                "cols": { "type": "integer", "minimum": 1 }
+              }
+            }
+          ]
+        },
+        "iconSizeDp": { "type": "integer", "minimum": 16, "maximum": 96, "default": 40, "description": "Largest icon size." },
+        "gapDp": { "type": "integer", "minimum": 0, "maximum": 32, "default": 4 },
+        "shape": { "enum": ["original", "circle", "squircle", "rounded", "teardrop"], "default": "original" },
+        "labels": {
+          "type": "object",
+          "default": { "show": false, "colorArgb": "#FFFFFF", "sizeSp": 11 },
+          "properties": {
+            "show": { "type": "boolean", "default": false },
+            "colorArgb": { "$ref": "#/$defs/color", "default": "#FFFFFF" },
+            "sizeSp": { "type": "integer", "minimum": 8, "maximum": 16, "default": 11, "description": "Section titles use this size too." }
+          }
+        },
+        "background": {
+          "type": "object",
+          "default": { "kind": "transparent", "colorArgb": "#000000", "alphaPct": 60, "cornerDp": 16 },
+          "properties": {
+            "kind": { "enum": ["transparent", "solid", "card"], "default": "transparent" },
+            "colorArgb": { "$ref": "#/$defs/color", "default": "#000000" },
+            "alphaPct": { "type": "integer", "minimum": 0, "maximum": 100, "default": 60 },
+            "cornerDp": { "type": "integer", "minimum": 0, "default": 16 }
+          }
+        },
+        "iconStyle": {
+          "default": { "type": "original" },
+          "oneOf": [
+            { "type": "object", "required": ["type"], "properties": { "type": { "const": "original" } } },
+            {
+              "type": "object",
+              "required": ["type", "tintArgb"],
+              "properties": { "type": { "const": "themed" }, "tintArgb": { "$ref": "#/$defs/color" } }
+            }
+          ]
+        },
+        "iconPack": { "type": ["string", "null"], "default": null, "description": "Package name of an installed icon pack, or null." },
+        "order": { "enum": ["manual", "alphabetical", "mostUsed"], "default": "manual" },
+        "overflow": { "enum": ["shrink", "scroll"], "default": "shrink" },
+        "badge": {
+          "type": "object",
+          "default": { "style": "number", "colorArgb": "#E53935", "sizePct": 100, "corner": "topEnd" },
+          "properties": {
+            "style": { "enum": ["number", "dot", "off"], "default": "number" },
+            "colorArgb": { "$ref": "#/$defs/color", "default": "#E53935" },
+            "sizePct": { "type": "integer", "minimum": 1, "default": 100 },
+            "corner": { "enum": ["topStart", "topEnd", "bottomStart", "bottomEnd"], "default": "topEnd" }
+          }
+        },
+        "night": {
+          "type": ["object", "null"],
+          "default": null,
+          "description": "Colours used instead in dark mode.",
+          "properties": {
+            "backgroundArgb": { "$ref": "#/$defs/color", "default": "#000000" },
+            "labelArgb": { "$ref": "#/$defs/color", "default": "#FFFFFF" },
+            "tintArgb": { "$ref": "#/$defs/color", "default": "#FFFFFF" }
+          }
+        }
+      }
+    },
+    "item": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["type", "packageName", "label"],
+          "properties": {
+            "type": { "const": "app" },
+            "packageName": { "type": "string", "minLength": 1 },
+            "label": { "type": "string" },
+            "activityName": { "type": "string", "description": "Optional; Iconic finds the launcher activity itself." }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["type"],
+          "description": "Starts a titled group. A blank label draws a thin divider.",
+          "properties": {
+            "type": { "const": "section" },
+            "label": { "type": "string", "default": "" }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["type", "label", "url"],
+          "properties": {
+            "type": { "const": "link" },
+            "label": { "type": "string" },
+            "url": { "type": "string" }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Build layouts with AI</title>
+<meta name="description" content="How to have ChatGPT, Claude, Gemini or any AI assistant write Iconic widget layouts, and the layout format it needs.">
+<link rel="icon" href="assets/favicon.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <img src="assets/iconic-logo.png" alt="">
+    <a href="index.html">Iconic</a>
+    <nav><a href="faq.html">FAQ</a><a href="ai.html" aria-current="page">AI</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></nav>
+  </header>
+
+  <h1>Build layouts with AI <span class="free">PRO · FREE NOW</span></h1>
+  <p class="muted">Describe your widgets to an AI assistant and it writes the layout. This page is for you and for the AI.</p>
+
+  <h2>What it is</h2>
+  <p>Describe the widgets you want to ChatGPT, Claude, Gemini or any AI assistant, and it writes the layout: which apps, in what order, in which sections, with what look. Iconic imports the answer. It is a Pro feature, and Pro is free during early access.</p>
+
+  <h2>How to use it</h2>
+  <ol>
+    <li>In Iconic, open the menu, tap <strong>Build with AI</strong>, then <strong>Copy my setup</strong>. This copies your widgets, their sizes and your installed apps, with instructions for the AI.</li>
+    <li>Paste it into your AI and say what you want.</li>
+    <li>Copy the AI's answer and tap <strong>Import from clipboard</strong> in Iconic, or share the answer to Iconic.</li>
+  </ol>
+  <p>A new layout is saved and you can put it on a widget right away. If the AI changed one of your existing widgets (by its <code>widgetId</code>), Iconic asks before replacing it.</p>
+  <p>You can also open or share a <code>.json</code> layout file to Iconic.</p>
+
+  <h2>Privacy</h2>
+  <p>Your setup only leaves your phone when you paste it somewhere yourself. Iconic itself sends nothing.</p>
+
+  <h2>Starting from this website</h2>
+  <p>If you want to start in your AI first, paste this prompt. Copy my setup in the app is better, because it includes your real app list and widget sizes.</p>
+<pre><code>I use Iconic, an Android app that shows small app icons in home-screen widgets.
+Write me a widget layout in the format documented at
+https://0x2alx.github.io/iconic-site/ai.html
+Ask me what I want first. Then answer with one JSON code block.</code></pre>
+  <p>Without your app list, the AI has to guess package names, and a wrong guess won't open anything.</p>
+
+  <h2>Format reference</h2>
+  <p>A machine-readable <a href="layout.schema.json">JSON Schema</a> (draft 2020-12) describes the same format.</p>
+
+  <h3>Top level</h3>
+  <ul>
+    <li><strong>One layout:</strong> <code>{"name": "Media", "items": [...], ...settings}</code></li>
+    <li><strong>Several layouts:</strong> <code>{"configs": [layout, layout]}</code>. A plain list of layouts, <code>[layout, layout]</code>, also works, and so does a backup file made by <strong>Back up to file</strong>.</li>
+    <li><strong>widgetId:</strong> optional. Give the id of one of your widgets (listed in Copy my setup) to change it in place; Iconic asks before replacing it. Leave it out, or use 0, and the layout is saved and you pick where it goes.</li>
+  </ul>
+
+  <h3>Items</h3>
+  <p><code>items</code> lists what the widget shows, in display order. Each item has a <code>type</code>:</p>
+  <ul>
+    <li><code>{"type": "app", "packageName": "com.netflix.mediaclient", "label": "Netflix"}</code>: an app. <code>packageName</code> and <code>label</code> are required. Iconic finds the launcher activity itself, so <code>activityName</code> can be left out.</li>
+    <li><code>{"type": "section", "label": "Watch"}</code>: starts a titled group of icons. A blank label (<code>"label": ""</code>) draws a thin divider instead.</li>
+    <li><code>{"type": "link", "label": "News", "url": "https://example.com"}</code>: a web address, shown as a letter tile. <code>label</code> and <code>url</code> are required.</li>
+  </ul>
+  <p>Shortcuts (a contact, a chat) can't be written by hand. Add those in the app.</p>
+
+  <h3>Settings</h3>
+  <p>All settings are optional. A setting that is left out, or has a value Iconic can't read, takes its default. Names of types and values ignore case, so <code>"Squircle"</code> works, but write them as shown.</p>
+  <table>
+    <thead><tr><th>Setting</th><th>Type</th><th>Default</th><th>Allowed values and meaning</th></tr></thead>
+    <tbody>
+      <tr><td><code>name</code></td><td>text</td><td>blank</td><td>The layout's name.</td></tr>
+      <tr><td><code>widgetId</code></td><td>number</td><td>0</td><td>Id of an existing widget to change. 0 means a new saved layout.</td></tr>
+      <tr><td><code>layout</code></td><td>object</td><td><code>{"type": "auto"}</code></td><td><code>{"type": "auto"}</code>: icons fill the widget. <code>{"type": "fixed", "rows": 4, "cols": 2}</code>: you pick the rows and columns (both required).</td></tr>
+      <tr><td><code>iconSizeDp</code></td><td>number</td><td>40</td><td>16 to 96. The largest icon size; icons shrink to fit.</td></tr>
+      <tr><td><code>gapDp</code></td><td>number</td><td>4</td><td>0 to 32. Space between icons and lines.</td></tr>
+      <tr><td><code>shape</code></td><td>text</td><td><code>"original"</code></td><td><code>"original"</code>, <code>"circle"</code>, <code>"squircle"</code>, <code>"rounded"</code>, <code>"teardrop"</code>.</td></tr>
+      <tr><td><code>labels</code></td><td>object</td><td><code>{"show": false, "colorArgb": "#FFFFFF", "sizeSp": 11}</code></td><td>Names under the icons. <code>show</code> is true or false; <code>sizeSp</code> is 8 to 16, and section titles use it too.</td></tr>
+      <tr><td><code>background</code></td><td>object</td><td><code>{"kind": "transparent", "colorArgb": "#000000", "alphaPct": 60, "cornerDp": 16}</code></td><td><code>kind</code> is <code>"transparent"</code>, <code>"solid"</code> or <code>"card"</code>. <code>alphaPct</code> is the opacity, 0 to 100. <code>cornerDp</code> rounds the corners.</td></tr>
+      <tr><td><code>iconStyle</code></td><td>object</td><td><code>{"type": "original"}</code></td><td><code>{"type": "original"}</code>: the apps' own icons. <code>{"type": "themed", "tintArgb": "#FFFFFF"}</code>: one colour, using the apps' monochrome icons where they have them.</td></tr>
+      <tr><td><code>iconPack</code></td><td>text or null</td><td><code>null</code></td><td>Package name of an installed icon pack (listed in Copy my setup), or null for the apps' own icons.</td></tr>
+      <tr><td><code>order</code></td><td>text</td><td><code>"manual"</code></td><td><code>"manual"</code>: the order you wrote. <code>"alphabetical"</code>: A to Z. <code>"mostUsed"</code>: most opened in the last two weeks (needs Usage access). Each section is sorted on its own.</td></tr>
+      <tr><td><code>overflow</code></td><td>text</td><td><code>"shrink"</code></td><td><code>"shrink"</code>: icons get smaller until everything fits. <code>"scroll"</code>: icons keep their size and the widget scrolls.</td></tr>
+      <tr><td><code>badge</code></td><td>object</td><td><code>{"style": "number", "colorArgb": "#E53935", "sizePct": 100, "corner": "topEnd"}</code></td><td><code>style</code> is <code>"number"</code>, <code>"dot"</code> or <code>"off"</code>. <code>sizePct</code> scales the badge. <code>corner</code> is <code>"topStart"</code>, <code>"topEnd"</code>, <code>"bottomStart"</code> or <code>"bottomEnd"</code>.</td></tr>
+      <tr><td><code>night</code></td><td>object or null</td><td><code>null</code></td><td>Colours to use in dark mode instead: <code>{"backgroundArgb": "#000000", "labelArgb": "#FFFFFF", "tintArgb": "#FFFFFF"}</code>. Null means the same look day and night.</td></tr>
+    </tbody>
+  </table>
+  <p><strong>Colours</strong> are written as <code>"#RRGGBB"</code> or <code>"#AARRGGBB"</code> (alpha first), like <code>"#E53935"</code>.</p>
+  <p><strong>What the importer forgives:</strong> the JSON can sit inside a code fence or among other text, as AI answers usually do. Trailing commas and comments are allowed. An item or layout that can't be read is skipped and the rest still imports.</p>
+
+  <h2>Sizing guide</h2>
+  <p>For the auto layout, work out how many icons fit before choosing the icon size and the number of apps. All sizes are in dp (labels and titles are in sp, counted the same here).</p>
+  <ul>
+    <li><strong>Columns:</strong> <code>floor((width + gap) / (icon + gap))</code></li>
+    <li><strong>Height:</strong> icon rows × (icon + label) + titles + one gap between every two lines (rows and titles).</li>
+    <li><strong>Label:</strong> <code>sizeSp × 1.3 + 2</code> when labels show, otherwise 0.</li>
+    <li><strong>Section title:</strong> <code>sizeSp × 1.3 + 6</code>. A divider is 9.</li>
+  </ul>
+  <p>When it doesn't fit, icons shrink 1 dp at a time, down to 16 dp. For big icons, use fewer apps, titles or labels.</p>
+  <p><strong>Tip:</strong> keep each section's app count a multiple of the column count, so every row is full.</p>
+  <p><strong>Worked example:</strong> a widget 80 × 261 dp, gap 4, no labels. Columns at 38 dp icons: floor(84 / 42) = 2. At 40 dp it would be floor(84 / 44) = 1, so 38 is the largest size for 2 columns. Two titled sections of 6 and 4 apps make 3 + 2 = 5 icon rows, so the height is 5 × 38 = 190, plus two titles at 11 × 1.3 + 6 = 20.3 each (40.6), plus 6 gaps of 4 (24): 254.6 dp, which fits in 261.</p>
+
+  <h2>Examples</h2>
+  <h3>One layout</h3>
+  <p>A "Media" widget with two titled sections of 6 and 4 apps, squircle icons. No ids and no activity names are needed.</p>
+<pre><code>{
+  "name": "Media",
+  "iconSizeDp": 38,
+  "shape": "squircle",
+  "items": [
+    {"type": "section", "label": "Watch"},
+    {"type": "app", "packageName": "com.netflix.mediaclient", "label": "Netflix"},
+    {"type": "app", "packageName": "com.google.android.youtube", "label": "YouTube"},
+    {"type": "app", "packageName": "com.disney.disneyplus", "label": "Disney+"},
+    {"type": "app", "packageName": "com.amazon.avod.thirdpartyclient", "label": "Prime Video"},
+    {"type": "app", "packageName": "com.hulu.plus", "label": "Hulu"},
+    {"type": "app", "packageName": "com.wbd.stream", "label": "Max"},
+    {"type": "section", "label": "Listen"},
+    {"type": "app", "packageName": "com.spotify.music", "label": "Spotify"},
+    {"type": "app", "packageName": "com.google.android.apps.youtube.music", "label": "YouTube Music"},
+    {"type": "app", "packageName": "com.audible.application", "label": "Audible"},
+    {"type": "app", "packageName": "au.com.shiftyjelly.pocketcasts", "label": "Pocket Casts"}
+  ]
+}</code></pre>
+
+  <h3>Two layouts, one replacing a widget</h3>
+  <p>The first layout has a <code>widgetId</code>, so Iconic offers to replace that widget. The second has none and is saved as a new layout.</p>
+<pre><code>{
+  "configs": [
+    {
+      "widgetId": 42,
+      "name": "Social",
+      "shape": "circle",
+      "labels": {"show": true, "sizeSp": 10},
+      "badge": {"style": "dot", "corner": "topEnd"},
+      "items": [
+        {"type": "app", "packageName": "com.instagram.android", "label": "Instagram"},
+        {"type": "app", "packageName": "com.whatsapp", "label": "WhatsApp"},
+        {"type": "app", "packageName": "org.telegram.messenger", "label": "Telegram"},
+        {"type": "app", "packageName": "com.reddit.frontpage", "label": "Reddit"}
+      ]
+    },
+    {
+      "name": "Travel",
+      "layout": {"type": "fixed", "rows": 2, "cols": 3},
+      "background": {"kind": "card", "colorArgb": "#1D1442", "alphaPct": 80, "cornerDp": 20},
+      "order": "alphabetical",
+      "items": [
+        {"type": "app", "packageName": "com.google.android.apps.maps", "label": "Maps"},
+        {"type": "app", "packageName": "com.ubercab", "label": "Uber"},
+        {"type": "app", "packageName": "com.airbnb.android", "label": "Airbnb"},
+        {"type": "app", "packageName": "com.booking", "label": "Booking.com"},
+        {"type": "link", "label": "Flights", "url": "https://www.google.com/travel/flights"}
+      ]
+    }
+  ]
+}</code></pre>
+
+  <footer><a href="index.html">Iconic</a> · <a href="faq.html">FAQ</a> · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a></footer>
+</div>
+</body>
+</html>
