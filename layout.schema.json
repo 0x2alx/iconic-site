@@ -36,8 +36,8 @@
               "required": ["type", "rows", "cols"],
               "properties": {
                 "type": { "const": "fixed" },
-                "rows": { "type": "integer", "minimum": 1 },
-                "cols": { "type": "integer", "minimum": 1 }
+                "rows": { "type": "integer", "minimum": 1, "maximum": 8 },
+                "cols": { "type": "integer", "minimum": 1, "maximum": 12 }
               }
             }
           ]
@@ -61,7 +61,7 @@
             "kind": { "enum": ["transparent", "solid", "card"], "default": "transparent" },
             "colorArgb": { "$ref": "#/$defs/color", "default": "#000000" },
             "alphaPct": { "type": "integer", "minimum": 0, "maximum": 100, "default": 60 },
-            "cornerDp": { "type": "integer", "minimum": 0, "default": 16 }
+            "cornerDp": { "type": "integer", "minimum": 0, "maximum": 48, "default": 16 }
           }
         },
         "iconStyle": {
@@ -84,7 +84,7 @@
           "properties": {
             "style": { "enum": ["number", "dot", "off"], "default": "number" },
             "colorArgb": { "$ref": "#/$defs/color", "default": "#E53935" },
-            "sizePct": { "type": "integer", "minimum": 1, "default": 100 },
+            "sizePct": { "type": "integer", "minimum": 60, "maximum": 150, "default": 100 },
             "corner": { "enum": ["topStart", "topEnd", "bottomStart", "bottomEnd"], "default": "topEnd" }
           }
         },
