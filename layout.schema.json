@@ -9,7 +9,8 @@
       "type": "object",
       "required": ["configs"],
       "properties": {
-        "configs": { "type": "array", "items": { "$ref": "#/$defs/layout" } }
+        "configs": { "type": "array", "items": { "$ref": "#/$defs/layout" } },
+        "icons": { "$ref": "#/$defs/icons" }
       }
     },
     { "type": "array", "items": { "$ref": "#/$defs/layout" } }
@@ -27,6 +28,7 @@
         "widgetId": { "type": "integer", "default": 0, "description": "Id of an existing widget to change in place. Omit or 0 for a new saved layout." },
         "name": { "type": "string", "default": "" },
         "items": { "type": "array", "items": { "$ref": "#/$defs/item" }, "description": "In display order." },
+        "icons": { "$ref": "#/$defs/icons" },
         "layout": {
           "default": { "type": "auto" },
           "oneOf": [
@@ -51,7 +53,8 @@
           "properties": {
             "show": { "type": "boolean", "default": false },
             "colorArgb": { "$ref": "#/$defs/color", "default": "#FFFFFF" },
-            "sizeSp": { "type": "integer", "minimum": 8, "maximum": 16, "default": 11, "description": "Section titles use this size too." }
+            "sizeSp": { "type": "integer", "minimum": 8, "maximum": 16, "default": 11, "description": "Section titles use this size too." },
+            "sectionArgb": { "anyOf": [{ "$ref": "#/$defs/color" }, { "type": "null" }], "default": null, "description": "Section titles and dividers. Null uses colorArgb." }
           }
         },
         "background": {
@@ -95,7 +98,8 @@
           "properties": {
             "backgroundArgb": { "$ref": "#/$defs/color", "default": "#000000" },
             "labelArgb": { "$ref": "#/$defs/color", "default": "#FFFFFF" },
-            "tintArgb": { "$ref": "#/$defs/color", "default": "#FFFFFF" }
+            "tintArgb": { "$ref": "#/$defs/color", "default": "#FFFFFF" },
+            "sectionArgb": { "anyOf": [{ "$ref": "#/$defs/color" }, { "type": "null" }], "default": null, "description": "Null uses labelArgb." }
           }
         }
       }
@@ -109,7 +113,8 @@
             "type": { "const": "app" },
             "packageName": { "type": "string", "minLength": 1 },
             "label": { "type": "string" },
-            "activityName": { "type": "string", "description": "Optional; Iconic finds the launcher activity itself." }
+            "activityName": { "type": "string", "description": "Optional; Iconic finds the launcher activity itself." },
+            "icon": { "$ref": "#/$defs/icon" }
           }
         },
         {
@@ -127,10 +132,25 @@
           "properties": {
             "type": { "const": "link" },
             "label": { "type": "string" },
-            "url": { "type": "string" }
+            "url": { "type": "string" },
+            "icon": { "$ref": "#/$defs/icon" }
           }
         }
       ]
+    },
+    "icon": {
+      "description": "A custom icon. Leave it out for the app's own icon, or a link's letter tile.",
+      "type": "object",
+      "required": ["type", "file"],
+      "properties": {
+        "type": { "const": "image" },
+        "file": { "type": "string", "description": "A key in the top-level \"icons\" map, like \"reddit\"." }
+      }
+    },
+    "icons": {
+      "type": "object",
+      "description": "Images for custom icons, by key: a PNG, JPEG or WebP as base64 (a data: URL works too). Square, about 256 px, with its own background colour, since it fills the whole icon shape. Only for AI agents that can download images and check them.",
+      "additionalProperties": { "type": "string" }
     }
   }
 }

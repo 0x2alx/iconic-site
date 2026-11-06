@@ -61,6 +61,15 @@ Ask me what I want first. Then answer with one JSON code block.</code></pre>
   </ul>
   <p>Shortcuts (a contact, a chat) can't be written by hand. Add those in the app.</p>
 
+  <h3>Custom icons</h3>
+  <p>Apps use their own icon and links a letter tile, unless you give them a picture. This is for AI agents that can download an image and look at it, such as coding agents with web access. Most chat apps can't, so leave icons out there.</p>
+  <ul>
+    <li>On the app or link, add <code>"icon": {"type": "image", "file": "reddit"}</code>. The <code>file</code> is any name you choose.</li>
+    <li>Next to <code>items</code> (or next to <code>configs</code>), add an <code>icons</code> map from that name to the image as base64: <code>"icons": {"reddit": "iVBORw0KGgo..."}</code>. PNG, JPEG and WebP work, and so does a <code>data:image/png;base64,</code> address.</li>
+    <li>Use a square image, about 256 px, with its own background colour. It fills the whole icon shape, like the app icons next to it. Iconic crops anything else to a square and scales it to 256 px.</li>
+    <li>Check the image is the right logo before you use it. Iconic never downloads anything itself.</li>
+  </ul>
+
   <h3>Settings</h3>
   <p>All settings are optional. A setting that is left out, or has a value Iconic can't read, takes its default. Names of types and values ignore case, so <code>"Squircle"</code> works, but write them as shown.</p>
   <table>
@@ -72,14 +81,14 @@ Ask me what I want first. Then answer with one JSON code block.</code></pre>
       <tr><td><code>iconSizeDp</code></td><td>number</td><td>40</td><td>16 to 96. The largest icon size; icons shrink to fit.</td></tr>
       <tr><td><code>gapDp</code></td><td>number</td><td>4</td><td>0 to 32. Space between icons and lines.</td></tr>
       <tr><td><code>shape</code></td><td>text</td><td><code>"original"</code></td><td><code>"original"</code>, <code>"circle"</code>, <code>"squircle"</code>, <code>"rounded"</code>, <code>"teardrop"</code>.</td></tr>
-      <tr><td><code>labels</code></td><td>object</td><td><code>{"show": false, "colorArgb": "#FFFFFF", "sizeSp": 11}</code></td><td>Names under the icons. <code>show</code> is true or false; <code>sizeSp</code> is 8 to 16, and section titles use it too.</td></tr>
+      <tr><td><code>labels</code></td><td>object</td><td><code>{"show": false, "colorArgb": "#FFFFFF", "sizeSp": 11}</code></td><td>Names under the icons. <code>show</code> is true or false; <code>sizeSp</code> is 8 to 16, and section titles use it too. Optional <code>sectionArgb</code> colours the section titles and dividers; without it they use <code>colorArgb</code>.</td></tr>
       <tr><td><code>background</code></td><td>object</td><td><code>{"kind": "transparent", "colorArgb": "#000000", "alphaPct": 60, "cornerDp": 16}</code></td><td><code>kind</code> is <code>"transparent"</code>, <code>"solid"</code> or <code>"card"</code>. <code>alphaPct</code> is the opacity, 0 to 100. <code>cornerDp</code> rounds the corners, 0 to 48.</td></tr>
       <tr><td><code>iconStyle</code></td><td>object</td><td><code>{"type": "original"}</code></td><td><code>{"type": "original"}</code>: the apps' own icons. <code>{"type": "themed", "tintArgb": "#FFFFFF"}</code>: one colour, using the apps' monochrome icons where they have them.</td></tr>
       <tr><td><code>iconPack</code></td><td>text or null</td><td><code>null</code></td><td>Package name of an installed icon pack (listed in Copy my setup), or null for the apps' own icons.</td></tr>
       <tr><td><code>order</code></td><td>text</td><td><code>"manual"</code></td><td><code>"manual"</code>: the order you wrote. <code>"alphabetical"</code>: A to Z. <code>"mostUsed"</code>: most opened in the last two weeks (needs Usage access). Each section is sorted on its own.</td></tr>
       <tr><td><code>overflow</code></td><td>text</td><td><code>"shrink"</code></td><td><code>"shrink"</code>: icons get smaller until everything fits. <code>"scroll"</code>: icons keep their size and the widget scrolls.</td></tr>
       <tr><td><code>badge</code></td><td>object</td><td><code>{"style": "number", "colorArgb": "#E53935", "sizePct": 100, "corner": "topEnd"}</code></td><td><code>style</code> is <code>"number"</code>, <code>"dot"</code> or <code>"off"</code>. <code>sizePct</code> scales the badge, 60 to 150. <code>corner</code> is <code>"topStart"</code>, <code>"topEnd"</code>, <code>"bottomStart"</code> or <code>"bottomEnd"</code>.</td></tr>
-      <tr><td><code>night</code></td><td>object or null</td><td><code>null</code></td><td>Colours to use in dark mode instead: <code>{"backgroundArgb": "#000000", "labelArgb": "#FFFFFF", "tintArgb": "#FFFFFF"}</code>. Null means the same look day and night.</td></tr>
+      <tr><td><code>night</code></td><td>object or null</td><td><code>null</code></td><td>Colours to use in dark mode instead: <code>{"backgroundArgb": "#000000", "labelArgb": "#FFFFFF", "tintArgb": "#FFFFFF"}</code>, plus an optional <code>sectionArgb</code> for section titles. Null means the same look day and night.</td></tr>
     </tbody>
   </table>
   <p><strong>Colours</strong> are written as <code>"#RRGGBB"</code> or <code>"#AARRGGBB"</code> (alpha first), like <code>"#E53935"</code>.</p>
